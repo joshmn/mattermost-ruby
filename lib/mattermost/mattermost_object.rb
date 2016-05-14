@@ -14,17 +14,7 @@ module Mattermost
     end
 
     def connected?
-      self.class.base_uri
-    end
-
-    def self.before_method(*names)
-      names.each do |name|
-        m = name # public_class_method(name)
-        define_method(name) do |*args, &block|
-          yield
-          m.bind(self).(*args, &block)
-        end
-      end
+      Mattermost::User.me.success?
     end
 
   end
