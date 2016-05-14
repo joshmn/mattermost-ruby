@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 mattermost-ruby*.gem
+.DS_Store
