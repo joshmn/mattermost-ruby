@@ -7,7 +7,7 @@ An ActiveRecord-inspired API client for Mattermost
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'mattermost'
+gem 'mattermost-ruby'
 ```
 
 And then execute:
@@ -16,25 +16,21 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install mattermost
+    $ gem install mattermost-ruby
 
 ## Configuration
 
 ```
 options = {:httparty => {:debug_output => $stdout} } # pass defaults to httparty
-
 Mattermost.connect("apiuser", "apipassword", "https://mattermost.example.com/api/v1", "default_team_name", options)
 
 users = Mattermost::User.all
-
 users.last.class #User
 
 users.last.reset_password("newpassword")
-
 users.last.id # abcdefgh12345678
 
 Mattermost::User.find("abcdefgh12345678") 
-
 Mattermost::User.find_by(:email => "me@example.com") # <#User ...> 
 ```
 
