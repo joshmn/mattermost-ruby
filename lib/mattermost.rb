@@ -33,6 +33,10 @@ module Mattermost
     end
   end
 
+  def self.connected?
+    Mattermost.get("/users/me").success?
+  end
+
   def self.team
     @team
   end

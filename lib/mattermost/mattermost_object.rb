@@ -13,9 +13,5 @@ module Mattermost
       end
     end
 
-    def connected?
-      Mattermost::User.me.success?
-    end
-
   end
 end
