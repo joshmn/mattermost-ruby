@@ -22,6 +22,10 @@ Or install it yourself as:
 
 Tested against v3. In the future I'll publish separate versions for those who don't upgrade. But I'm going to assume most of us do since this is an infant.
 
+## Setup
+
+Because Mattermost doesn't provide an API user, Mattermost-Ruby uses a system admin account for its API calls. 
+ 
 ## Configuration
 
 ```
