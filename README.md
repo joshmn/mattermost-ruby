@@ -18,11 +18,15 @@ Or install it yourself as:
 
     $ gem install mattermost-ruby
 
+## Supported versions of Mattermost
+
+Tested against v3. In the future I'll publish separate versions for those who don't upgrade. But I'm going to assume most of us do since this is an infant.
+
 ## Configuration
 
 ```
 options = {:httparty => {:debug_output => $stdout} } # pass defaults to httparty
-Mattermost.connect("apiuser", "apipassword", "https://mattermost.example.com/api/v1", "default_team_name", options)
+Mattermost.connect("apiuser", "apipassword", "https://mattermost.example.com/api/v3", "default_team_name", options)
 
 users = Mattermost::User.all
 users.last.class #User
