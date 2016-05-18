@@ -2,6 +2,9 @@ module Mattermost
   class Channel < MattermostObject
 
     def self.new(attributes = {})
+      if attributes.empty?
+        return ::Channel.default_attributes
+      end
       ::Channel.new(attributes)
     end
 

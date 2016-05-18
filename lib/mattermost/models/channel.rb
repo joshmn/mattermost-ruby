@@ -4,10 +4,15 @@ class Channel < Base
     defined?(self.id) ? update : create_channel
   end
 
+  def name 
+    @name ||= self.display_name.gsub(" ", '-')
+  end
+
   # Delete a channel
   def delete
     Mattermost.post("/channels/#{self.id}/delete")
   end
+  alias_method :destroy, :delete 
 
   # Get channel info
   def info
@@ -98,10 +103,15 @@ class Channel < Base
     {:display_name => String, :team_id => String, :type => Integer, :purpose => String}
   end
 
-
   protected
   def create_channel
-    `curl '#{Mattermost.base_uri}/channels/create' -H 'Cookie: MMTOKEN=#{Mattermost.headers['Cookie'].split("=")[1]};' -H 'X-Requested-With: XMLHttpRequest' --data-binary '{"display_name":"#{self.display_name}","name":"#{self.display_name.gsub(" ", '-')}","team_id":"#{Mattermost.team.id}","purpose":"#{self.purpose}.","type":"#{self.type}"}' --compressed`
-  end
-
+    Mattermost.post("/channels/create", 
+      :body => {
+        :display_name => self.display_name, 
+        :name => self.name,
+        :team_id => Mattermost::Team.id,
+        :purpose => self.purpose,
+        :type => self.type 
+        }.to_json)
+   end
 end
