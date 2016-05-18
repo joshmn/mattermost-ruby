@@ -4,6 +4,18 @@ module Mattermost
     def initialize
     end
 
+    # Return an object that matches a given attribute.
+    # Return nil if no matches
+    def self.find_by(opts = {})
+      obj = all.select { |obj| obj.send(opts.keys.first) == opts.values.first }.first
+      return obj 
+    end
+
+    # Return the user that has an id of @param id
+    def self.find(id)
+      find_by(:id => id)
+    end
+
     class << self
       def method_missing(method_id, *args) #:nodoc:
         o = self.new

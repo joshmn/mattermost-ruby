@@ -5,7 +5,8 @@ module Mattermost
       ::Channel.new(attributes)
     end
 
-    # Returns all channels for the current team
+    # Returns channels for the current team _that the logged in user has joined_
+    # call Mattermost::Channel.more to get a list of all the channels (like, actually)
     #
     # @param force_refresh [boolean] to recache the channels
     def self.all(force_refresh = false)
@@ -13,12 +14,19 @@ module Mattermost
       @channels ||= all_channels
     end
 
-    # Returns "more" channels for the current team
+    # Returns all of the channels for the current team
+    # Unlike self.all which only returns the channels the user has joined
     def self.more
-      Mattermost.get("/channels/more")
+      channels = []
+      request = Mattermost.get("/teams/#{Mattermost.team.id}/channels/more")
+      request.parsed_response['channels'].each do |channel|
+        channels << self.new(channel)
+      end
+      return channels
     end
 
-    # Returns a hash of counts for each *team*
+    # Returns a hash of counts
+    # This is mostly useless because fetching a channel will return the counts for you.
     # {"counts"=>{"ps6kdfuk9p8mjx6pkr3krgq3by"=>58334, "yckjbepc4frbmmq9in6tap1dwa"=>32},
     #  "update_times"=>{"ps6kdfuk9p8mjx6pkr3krgq3by"=>1463180151709, "yckjbepc4frbmmq9in6tap1dwa"=>1457216806189}}
     def self.counts
@@ -37,7 +45,7 @@ module Mattermost
       request.parsed_response['channels'].each do |channel|
         channels << self.new(channel)
       end
-      channels
+      return channels
     end
 
   end

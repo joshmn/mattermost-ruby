@@ -14,6 +14,21 @@ class Channel < Base
     Mattermost.get("/channels/#{self.id}/")
   end
 
+  # Returns posts for the channel _before_ a given post.id 
+  # 
+  # @param before [string] to get posts before a given post id
+  def posts(before = nil)
+    uri = "/channels/#{self.id}/posts"
+    uri += "/#{before}" if before 
+    uri += "/0/60?_=#{Time.now.to_i}"
+    request = Mattermost.get("/channels/#{self.id}/posts/0/60?_=#{Time.now.to_i}")
+    response = {}
+    request.parsed_response['posts'].each do |_, post|
+      response[k] = Post.new(post)
+    end
+    response
+  end
+
   # Get the users in a channel
   def get_channel_extra_info(member_limit = nil)
     uri = "/channels/#{self.id}/extra_info"
@@ -48,6 +63,7 @@ class Channel < Base
     user_id = user.is_a? User ? user.id : user
     Mattermost.post("/channels/#{self.id}/add", :body => {:user_id => user_id})
   end
+  alias_method :add_user, :add_member 
 
   # Add a user to a channel
   # Send a user object or a user_id
@@ -55,6 +71,7 @@ class Channel < Base
     user_id = user.is_a? User ? user.id : user
     Mattermost.post("/channels/#{self.id}/remove", :body => {:user_id => user_id})
   end
+  alias_method :remove_user, :remove_member 
 
   def update_last_viewed_at
     Mattermost.post("/channels/#{self.id}/update_last_viewed_at")
@@ -81,14 +98,6 @@ class Channel < Base
     {:display_name => String, :team_id => String, :type => Integer, :purpose => String}
   end
 
-  def posts
-    request = Mattermost.get("/channels/#{self.id}/posts/0/60?_=#{Time.now.to_i}")
-    response = {}
-    request.parsed_response['posts'].each do |k, v|
-      response[k] = Post.new(v)
-    end
-    response
-  end
 
   protected
   def create_channel

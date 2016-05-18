@@ -10,22 +10,10 @@ module Mattermost
       @users ||= all_users
     end
 
-    # Return a user that matches a given attribute.
-    # Common pairs are :email => email, or :username => username
-    # Return nil if not no matches
-    def self.find_by(opts = {})
-      all.select { |user| user.send(opts.keys.first) == opts.values.first }.first
-    end
-
-    # Return the user that has an id of @param id
-    def self.find(id)
-      find_by(:id => id)
-    end
-
     # Return the status of users
     # Statuses are "offline", "away", or "online"
     def self.status(user_ids = [])
-      Mattermost.post("/users/status", :body => user_ids.to_json)
+      request = Mattermost.post("/users/status", :body => user_ids.to_json)
     end
 
     # Returns the user that was used for authentication on Mattermost.connect
@@ -34,8 +22,12 @@ module Mattermost
       self.new(request.parsed_response)
     end
 
+    # Create a user from the team's invite.
+    # Returns a user
     def self.create_from_invite(email, password, username)
-      Mattermost.post("/users/create?d=&iid=#{Mattermost.team.invite_id}", :body => {:allow_marketing => true, :email => email, :password => password, :username => username}.to_json)
+      request = Mattermost.post("/users/create?d=&iid=#{Mattermost.team.invite_id}", 
+        :body => {:allow_marketing => true, :email => email, :password => password, :username => username}.to_json)
+      self.new(request.parsed_response)
     end
 
     protected

@@ -3,7 +3,9 @@ class Post < Base
 
   def initialize(attributes)
     super(attributes)
-    @user = Mattermost::User.find(attributes['user_id'])
+    if attributes['user_id']
+	  @user = Mattermost::User.find(attributes['user_id'])
+	end
   end
 
 end
