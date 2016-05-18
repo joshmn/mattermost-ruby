@@ -33,7 +33,7 @@ module Mattermost
     protected
     def self.all_channels
       channels = []
-      request = Mattermost.get("/channels/")
+      request = Mattermost.get("/teams/#{Mattermost.team.id}/channels/")
       request.parsed_response['channels'].each do |channel|
         channels << self.new(channel)
       end

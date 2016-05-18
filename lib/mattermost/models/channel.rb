@@ -68,13 +68,13 @@ class Channel < Base
   # Update the channel's header. I really hate that they have a specific
   # method for this.
   def update_header(header)
-    Mattermost.post("/channels/update_header", :body => {:channel_id => self.id, :channel_header => header})
+    Mattermost.post("/teams/#{Mattermost.team.id}/channels/#{self.id}/update_header", :body => {:channel_id => self.id, :channel_header => header}.to_json)
   end
 
   # Update the channel's purpose. I really hate that they have a specific
   # method for this.
   def update_purpose(purpose)
-    Mattermost.post("/channels/update_purpose", :body => {:channel_id => self.id, :channel_purpose => purpose})
+    Mattermost.post("/teams/#{Mattermost.team.id}/channels/#{self.id}/update_purpose", :body => {:channel_id => self.id, :channel_purpose => purpose}.to_json)
   end
 
   def self.default_attributes

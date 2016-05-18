@@ -34,10 +34,14 @@ module Mattermost
       self.new(request.parsed_response)
     end
 
+    def self.create_from_invite(email, password, username)
+      Mattermost.post("/users/create?d=&iid=#{Mattermost.team.invite_id}", :body => {:allow_marketing => true, :email => email, :password => password, :username => username}.to_json)
+    end
+
     protected
     def self.all_users
       users = []
-      request = Mattermost.get("/users/profiles")
+      request = Mattermost.get("/users/profiles/#{Mattermost.team.id}")
       request.parsed_response.values.each do |user|
         users << self.new(user)
       end

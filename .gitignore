@@ -10,3 +10,4 @@
 mattermost-ruby*.gem
 .DS_Store
 test.rb
+/.idea/
