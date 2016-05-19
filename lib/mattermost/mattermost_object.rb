@@ -7,8 +7,7 @@ module Mattermost
     # Return an object that matches a given attribute.
     # Return nil if no matches
     def self.find_by(opts = {})
-      obj = all.select { |obj| obj.send(opts.keys.first) == opts.values.first }.first
-      return obj 
+      all.select { |obj| obj.send(opts.keys.first) == opts.values.first }.first
     end
 
     # Return the user that has an id of @param id

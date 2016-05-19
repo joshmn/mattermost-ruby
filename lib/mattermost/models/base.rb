@@ -7,7 +7,6 @@ class Base
     end
   end
 
-
   def attributes
     return self.class.default_attributes unless defined?(@id)
     hash = {}
